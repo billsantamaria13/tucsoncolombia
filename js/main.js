@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initCounters();
     initContactForm();
     initTiltEffect();
+    initConveniosSlider();
 });
 
 /* ----------------------------------------------------------------
@@ -89,6 +90,41 @@ function initGallerySlider() {
         interval: 4500,
         counterId: 'galleryCounter',
     });
+}
+
+/* ----------------------------------------------------------------
+   CONVENIOS SLIDER (Native Scroll Snap)
+   ---------------------------------------------------------------- */
+function initConveniosSlider() {
+    const viewport = document.querySelector('.conv-viewport');
+    const prevBtn = document.getElementById('convPrev');
+    const nextBtn = document.getElementById('convNext');
+    const dots = document.querySelectorAll('#convDots .c-dot');
+    
+    if (!viewport) return;
+
+    function getSlideWidth() {
+        return viewport.querySelector('.conv-slide').offsetWidth;
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            viewport.scrollBy({ left: -getSlideWidth(), behavior: 'smooth' });
+        });
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            viewport.scrollBy({ left: getSlideWidth(), behavior: 'smooth' });
+        });
+    }
+
+    // Optional: update dots on scroll
+    viewport.addEventListener('scroll', () => {
+        const slideWidth = getSlideWidth();
+        const currentIndex = Math.round(viewport.scrollLeft / slideWidth);
+        dots.forEach((d, idx) => d.classList.toggle('active', idx === currentIndex));
+    }, { passive: true });
 }
 
 /* ----------------------------------------------------------------
